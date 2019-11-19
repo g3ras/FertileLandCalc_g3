@@ -6,12 +6,12 @@ You have a farm of 400m by 600m where coordinates of the field are from (0, 0) t
 Output Output all the fertile land area in square meters, sorted from smallest area to greatest, separated by a space
 
 # Requirements to build and run the project
-Java JDK/JRE 1.8 
-Gradle 2.14.1 
+1) Java JDK/JRE 1.8 
+2) Gradle 2.14.1 
 
 # Jars needed for Junit testing
-Junit-4.12.jar 
-hamcrest-core-1.3.jar
+1) Junit-4.12.jar 
+2) hamcrest-core-1.3.jar
 
 # Pointers to setup the project
 1) The project can be set up in Eclipse IDE.
