@@ -18,8 +18,8 @@ Sample Input                                                                Samp
 3) JUnit-4.12
 4) Eclipse or equivalent IDE
 
-# Jars needed for Junit testing
-1) Junit-4.12.jar 
+# Jars needed for JUnit testing
+1) JUnit-4.12.jar 
 2) hamcrest-core-1.3.jar
 
 # Pointers to setup the project
