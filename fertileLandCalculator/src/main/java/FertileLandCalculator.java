@@ -21,24 +21,27 @@ public class FertileLandCalculator {
 	  * @return get the String of fertile land area sorted out from smallest to largest separated by space
 	  */ 
 	  
-	  public  String getFertileLandArea(String[] inputCoordinates,int length,int width) { 
+	  public  String getFertileLandArea(String[] inputCoordinates,int length,int width) throws Exception { 
 	    	 List<Coordinates> totalBarrenLandCoordinates = new ArrayList<>();
 	         List<Integer> fertileLandArr = new ArrayList<>();
 	         String fertileLandArea = ""; 
-	         	                  
-	         totalBarrenLandCoordinates = getBarrenLandCoordinates(inputCoordinates);
-	         	         
-	         populateAreaMatrix(totalBarrenLandCoordinates,length,width); 
-	         
-	         fertileLandArr = calculateFertileLandArea(fertileLandArr, length, width, 0, 0);	
-	         Collections.sort(fertileLandArr);
-	         if(!fertileLandArr.isEmpty()) {  	    	    
-	             for (Integer fLandArea : fertileLandArr) { 
-	            	 fertileLandArea += fLandArea.toString() + " "; 
-	           } 
-	         } else { 
-	        	 fertileLandArea = "No Fertile area found."; 
-	         } 
+	         try {	                  
+		         totalBarrenLandCoordinates = getBarrenLandCoordinates(inputCoordinates);
+		         	         
+		         populateAreaMatrix(totalBarrenLandCoordinates,length,width); 
+		         
+		         fertileLandArr = calculateFertileLandArea(fertileLandArr, length, width, 0, 0);	
+		         Collections.sort(fertileLandArr);
+		         if(!fertileLandArr.isEmpty()) {  	    	    
+		             for (Integer fLandArea : fertileLandArr) { 
+		            	 fertileLandArea += fLandArea.toString() + " "; 
+		           } 
+		         } else { 
+		        	 fertileLandArea = "No Fertile area found."; 
+		         } 
+	         }catch(Exception e) {
+	        	 System.out.println("Invalid input.");
+	         }
 	         return fertileLandArea; 
 	  }  
 	     
@@ -52,8 +55,8 @@ public class FertileLandCalculator {
 		  List<Coordinates> totalBarrenLandCoordinates = new ArrayList<>();
    		    for (String str:inputCoordinates) { 	        	 
 	        	 Integer x0 = 0, x1 = 0, y0 = 0, y1 = 0;
-	             String[] barrenCoordinateStr = str.split(" "); 
-	             for (int i = 0; i < barrenCoordinateStr.length; i++) { 
+	             String[] barrenCoordinateStr = str.split(" ");
+	             for (int i = 0; i < barrenCoordinateStr.length; i++) {	            	
 	            	 x0 = Integer.parseInt(barrenCoordinateStr[0]);
 	            	 y0 = Integer.parseInt(barrenCoordinateStr[1]);
 	            	 x1 = Integer.parseInt(barrenCoordinateStr[2]);
