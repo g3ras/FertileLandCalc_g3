@@ -15,6 +15,8 @@ Sample Input                                                                Samp
 # Requirements to build and run the project
 1) Java JDK/JRE 1.8 
 2) Gradle 2.14.1 
+3) JUnit-4.12
+4) Eclipse or equivalent IDE
 
 # Jars needed for Junit testing
 1) Junit-4.12.jar 
