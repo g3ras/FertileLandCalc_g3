@@ -34,5 +34,8 @@ Sample Input                                                                Samp
 The project can be run as Java Application from Eclipse IDE.
 
 # Attachements : 
-TestReport.html
 
+1) FertileLandCalculator_Flowchart.doc
+2) FertileLandCalc_Graph.doc
+3) FertileLandCalculatorTestReport.doc
+4) Console output screenshot
