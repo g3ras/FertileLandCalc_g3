@@ -32,6 +32,7 @@ Sample Input                                                                Samp
 
 # To run the application 
 The project can be run as Java Application from Eclipse IDE.
+Enter Input through the console in required format to get the desired output.
 
 # Attachements : 
 
