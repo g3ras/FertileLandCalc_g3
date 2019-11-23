@@ -29,8 +29,8 @@ public class FertileLandCalculator {
 		         totalBarrenLandCoordinates = getBarrenLandCoordinates(inputCoordinates);
 		         	         
 		         populateAreaMatrix(totalBarrenLandCoordinates,length,width); 
-		         
-		         fertileLandArr = calculateFertileLandArea(fertileLandArr, length, width, 0, 0);	
+		         String firstKey = 0+","+0;
+		         fertileLandArr = calculateFertileLandArea(fertileLandArr, length, width, firstKey);	
 		         Collections.sort(fertileLandArr);
 		         if(!fertileLandArr.isEmpty()) {  	    	    
 		             for (Integer fLandArea : fertileLandArr) { 
@@ -93,9 +93,8 @@ public class FertileLandCalculator {
 	                   } else { 
 	                       co.setIsBarren(false); 
 	                   } 
-	              } 
-	              String key = String.valueOf(x)+","+String.valueOf(y);
-	              areaMatrixMap.put(key, co); 	                 
+	              }
+	              areaMatrixMap.put(x+","+y, co); 	                 
 	          } 
 	      }
 		
@@ -108,19 +107,21 @@ public class FertileLandCalculator {
 	  * @param fland
 	  * @param length
 	  * @param width  
-	  * @param xVal 
-	  * @param yVal 
+	  * @param String key 
 	  * @return List of area of each fertile land 
 	  */ 
-	  private List<Integer> calculateFertileLandArea(List<Integer> fLand, int length,int width,int xVal, int yVal) { 
+	  private List<Integer> calculateFertileLandArea(List<Integer> fLand, int length,int width,String firstKey) {	
+		  String[] firstKeys = firstKey.split(",");
+		  int xVal = Integer.parseInt(firstKeys[0]),yVal = Integer.parseInt(firstKeys[1]);
 	      for (int y = yVal; y < width; y++) { 
 	          for (int x = xVal; x < length; x++) {
-	        	  String key = String.valueOf(x)+","+String.valueOf(y);	               	                 
+	        	  String key = x+","+y;	               	                 
 	              Coordinates co = areaMatrixMap.get(key); 
 	              if (!co.isChecked()) {
-	                  int totalFertileArea = traverseAndCheckFertileLand(areaMatrixMap, length, width, x, y); 
-	                  fLand.add(totalFertileArea); 
-	                  calculateFertileLandArea(fLand, x, y, length, width); 
+	                  Map totalFertileAreaMap = traverseAndCheckFertileLand(areaMatrixMap, length, width, x, y);	                
+	                  fLand.add((int)totalFertileAreaMap.get("count"));	                 
+	                  String lastCheckedKey = (String)totalFertileAreaMap.get("lastCheckedKey");
+	                  calculateFertileLandArea(fLand, length, width,lastCheckedKey); 
 	               } 
 	          } 
 	      } 
@@ -135,40 +136,44 @@ public class FertileLandCalculator {
 	  * @param width 
 	  * @param x 
 	  * @param y 
-	  * @return int count - fertile Land area 
+	  * @return Map (lastCheckedKey,fertile Land area) 
 	  */
-	  private int traverseAndCheckFertileLand(Map<String,Coordinates> areaMatrix, int length, int width, int x, int y) { 
+	  private Map traverseAndCheckFertileLand(Map<String,Coordinates> areaMatrix, int length, int width, int x, int y) { 
 	      int count = 0; 
-	      Queue<Coordinates> queue = new LinkedList<Coordinates>();  
-	      queue.add(new Coordinates(x, y)); 	     	       
-	      while (!queue.isEmpty()) { // while loop until all the elements in the queue are checked 
-	            Coordinates c = queue.remove(); //get the queue head element	             
-	            if(isCoordinateUnChecked(areaMatrix, c,length,width)) {       
+	      Map<String,Object> fertileLandAreaMap = new HashMap<String,Object>();
+	      Queue<String> queue = new LinkedList<String>();  
+	      queue.add(x+","+ y);
+	      while (!queue.isEmpty()) { // while loop until all the key elements in the queue are checked 
+	            String k = queue.remove(); //get the queue head element
+	            if(isCoordinateUnChecked(areaMatrix, k,length,width)) {  
+	            	String[] qco = k.split(",");
+	       		    int qx = Integer.parseInt(qco[0]),qy=Integer.parseInt(qco[1]);
 	            	//Count the coordinates of the fertile land that marked as checked
 	            	count += 1;  
-	            	//Get the nearby coordinates for the passed coordinate in the queue
-	                int x0=c.getX()-1, x1=c.getX()+1, y0=c.getY()-1, y1=c.getY()+1;	 
-	                String key1 = String.valueOf(c.getX())+","+String.valueOf(y0);
-	                String key2 = String.valueOf(c.getX())+","+String.valueOf(y1);
-	                String key3 = String.valueOf(x0)+","+String.valueOf(c.getY());
-	                String key4 = String.valueOf(x1)+","+String.valueOf(c.getY());
-	               //verify if the nearby coordinates are checked or not, if not checked add to the queue
+	            	//Get the nearby coordinates for the passed key in the queue
+	                int x0=qx-1, x1=qx+1, y0=qy-1, y1=qy+1;	 
+	                String key1 = qx+","+y0;
+	                String key2 = qx+","+y1;
+	                String key3 = x0+","+qy;
+	                String key4 = x1+","+qy;
+	               //verify if the nearby coordinates are checked or not, if not checked add the corresponding keys to the queue
 	                if (y0 >= 0 && !areaMatrix.get(key1).isChecked()) 	                  
-	                	queue.add(new Coordinates(c.getX(), y0)); 
+	                	queue.add(key1); 
 	                 
 	                if (y1 < width && !areaMatrix.get(key2).isChecked()) 		              
-	                	queue.add(new Coordinates(c.getX(), y1)); 
+	                	queue.add(key2); 
 	                 
 	                 if ( x0 >= 0 && !areaMatrix.get(key3).isChecked()) 
-	                	 queue.add(new Coordinates(x0, c.getY())); 
+	                	 queue.add(key3); 
 	                 
 	                 if (x1 < length && !areaMatrix.get(key4).isChecked()) 	                	
-	                	 queue.add(new Coordinates(x1, c.getY())); 
+	                	 queue.add(key4);
 	                 
+	                 fertileLandAreaMap.put("lastCheckedKey",k);
 	             }
 	      }
-	      
-	      return count; 
+	      fertileLandAreaMap.put("count", count);
+	      return fertileLandAreaMap; 
 	  }
 	     
 	 
@@ -180,13 +185,14 @@ public class FertileLandCalculator {
 	  * @param width 
 	  * @return boolean value representing whether coordinate c has been checked or not 
 	  */ 
-	  private static boolean isCoordinateUnChecked(Map<String,Coordinates> areaMatrix, Coordinates c,int length,int width) {	 
+	  private static boolean isCoordinateUnChecked(Map<String,Coordinates> areaMatrix, String k,int length,int width) {
+		   String[] co = k.split(",");
+		   int x = Integer.parseInt(co[0]),y=Integer.parseInt(co[1]);
            //verify if the Coordinate c is not outside the boundaries of the areaMatrix
-	       if (c.getX() < 0 || c.getY() < 0 || c.getX() >= length || c.getY() >= width) { 
+	       if (x < 0 ||y < 0 || x >= length ||y >= width) { 
 	           return false; 
-	       }	
-	       String key = String.valueOf(c.getX())+","+String.valueOf(c.getY());
-	       Coordinates coordinateToCheck = areaMatrix.get(key);	 
+	       }
+	       Coordinates coordinateToCheck = areaMatrix.get( x+","+y);	 
 	       if (coordinateToCheck.isChecked()) { 
 	           return false; 
 	       } 	 
