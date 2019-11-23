@@ -16,7 +16,7 @@ public class FertileLandCalculator {
 	  /** This method finds and calculates the fertile land area from the given input coordinates of the barrenLands
 	  * a) calculate the totalBarrenCooridinates and store it as a List<Coordinates>
 	  * b) populate the areaMatrix Map with barren lands marked as checked and fertile land as unchecked in the coordinates
-	  * c) calculate the fertileLandArea by traversing through the areaMatrix coordinates using counter, queue for storing and validating nearby coordinates  
+	  * c) calculate the fertileLandArea by traversing through the areaMatrix coordinates using counter, queue for adding nearby coordinates keys and validating if checked  
 	  * @param inputCoordinates - (left bottom, right upper) of barrenLand
 	  * @return get the String of fertile land area sorted out from smallest to largest separated by space
 	  */ 
@@ -118,7 +118,7 @@ public class FertileLandCalculator {
 	        	  String key = x+","+y;	               	                 
 	              Coordinates co = areaMatrixMap.get(key); 
 	              if (!co.isChecked()) {
-	                  Map totalFertileAreaMap = traverseAndCheckFertileLand(areaMatrixMap, length, width, x, y);	                
+	                  Map totalFertileAreaMap = traverseAndCheckFertileLand(areaMatrixMap, length, width, key);	                
 	                  fLand.add((int)totalFertileAreaMap.get("count"));	                 
 	                  String lastCheckedKey = (String)totalFertileAreaMap.get("lastCheckedKey");
 	                  calculateFertileLandArea(fLand, length, width,lastCheckedKey); 
@@ -138,11 +138,11 @@ public class FertileLandCalculator {
 	  * @param y 
 	  * @return Map (lastCheckedKey,fertile Land area) 
 	  */
-	  private Map traverseAndCheckFertileLand(Map<String,Coordinates> areaMatrix, int length, int width, int x, int y) { 
+	  private Map traverseAndCheckFertileLand(Map<String,Coordinates> areaMatrix, int length, int width, String key) { 
 	      int count = 0; 
 	      Map<String,Object> fertileLandAreaMap = new HashMap<String,Object>();
 	      Queue<String> queue = new LinkedList<String>();  
-	      queue.add(x+","+ y);
+	      queue.add(key);
 	      while (!queue.isEmpty()) { // while loop until all the key elements in the queue are checked 
 	            String k = queue.remove(); //get the queue head element
 	            if(isCoordinateUnChecked(areaMatrix, k,length,width)) {  
