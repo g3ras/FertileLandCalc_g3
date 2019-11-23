@@ -192,7 +192,7 @@ public class FertileLandCalculator {
 	       if (x < 0 ||y < 0 || x >= length ||y >= width) { 
 	           return false; 
 	       }
-	       Coordinates coordinateToCheck = areaMatrix.get( x+","+y);	 
+	       Coordinates coordinateToCheck = areaMatrix.get(k);	 
 	       if (coordinateToCheck.isChecked()) { 
 	           return false; 
 	       } 	 
